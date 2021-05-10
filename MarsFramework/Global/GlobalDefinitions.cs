@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+
 namespace MarsFramework.Global
 {
     class GlobalDefinitions
@@ -15,6 +16,7 @@ namespace MarsFramework.Global
         //Initialise the browser
         public static IWebDriver driver { get; set; }
 
+       
         #region WaitforElement 
 
         public static void wait(int time)
@@ -25,7 +27,7 @@ namespace MarsFramework.Global
         public static IWebElement WaitForElement(IWebDriver driver, By by, int timeOutinSeconds)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeOutinSeconds));
-            return (wait.Until(ExpectedConditions.ElementIsVisible(by)));
+            return wait.Until(ExpectedConditions.ElementIsVisible(by));
         }
         #endregion
 
@@ -72,6 +74,12 @@ namespace MarsFramework.Global
                         return resultTable;
                     }
                 }
+            }
+
+            //Converting the time from STRING to Datetime
+            public static DateTime ReadTime(int rowNumber, string columnName)
+            {
+                return DateTime.Parse(ReadData(rowNumber, columnName));
             }
 
             public static string ReadData(int rowNumber, string columnName)
@@ -151,6 +159,8 @@ namespace MarsFramework.Global
                 return fileName.ToString();
             }
         }
+
+        
         #endregion
     }
 }

@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using MarsFramework.Global;
+using MarsFramework.Pages;
+using NUnit.Framework;
+using SeleniumExtras.PageObjects;
 
 namespace MarsFramework
 {
@@ -9,13 +12,29 @@ namespace MarsFramework
         class User : Global.Base
         {
 
-            [Test]
-            public void Test()
-            {
 
+
+                
+
+             [Test]
+            public void ShareSkill()
+            {
+                var ShareSkill = new ShareSkill();
+                PageFactory.InitElements(Global.GlobalDefinitions.driver, ShareSkill);
+                ShareSkill.EditShareSkill();
+                
 
             }
 
+            [Test]
+            public void ManageListings()
+
+            {
+                var ManageListings = new ManageListings();
+                PageFactory.InitElements(Global.GlobalDefinitions.driver, ManageListings);
+                ManageListings.Listings();
+
+            }
 
 
         }

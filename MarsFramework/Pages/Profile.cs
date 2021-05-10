@@ -1,5 +1,8 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.PageObjects;
+﻿using MarsFramework.Global;
+using OpenQA.Selenium;
+using SeleniumExtras.PageObjects;
+using System.Threading;
+using static NUnit.Core.NUnitFramework;
 
 namespace MarsFramework
 {
@@ -9,6 +12,7 @@ namespace MarsFramework
         public Profile()
         {
             PageFactory.InitElements(Global.GlobalDefinitions.driver, this);
+            
         }
 
         #region  Initialize Web Elements 
@@ -136,7 +140,7 @@ namespace MarsFramework
         [FindsBy(How = How.XPath, Using = "//*[@id='account-profileEdit-section']/div/section[2]/div/div/div/form/div[6]/div/div[2]/div/div/div[1]/div/input")]
         private IWebElement EnterCerti { get; set; }
 
-        //Certified from
+        //Certified from 
         [FindsBy(How = How.XPath, Using = "//*[@id='account-profileEdit-section']/div/section[2]/div/div/div/form/div[6]/div/div[2]/div/div/div[2]/div[1]/input")]
         private IWebElement CertiFrom { get; set; }
 
@@ -160,11 +164,18 @@ namespace MarsFramework
         [FindsBy(How = How.XPath, Using = "//*[@id='account-profileEdit-section']/div/section[2]/div/div/div/form/div[8]/div/div[4]/span/button[1]")]
         private IWebElement Save { get; set; }
 
+        ////Looking for Sign Out Button
+        //[FindsBy(How = How.XPath, Using = "//button[normalize-space()='Sign Out']")]
+        //private IWebElement SignOutButton { get; set; }
+
         #endregion
 
         internal void EditProfile()
         {
-
+            GlobalDefinitions.driver.Navigate().GoToUrl("http://localhost:5000/Account/Profile");
+            
         }
+
+        
     }
 }

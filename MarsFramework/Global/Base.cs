@@ -15,12 +15,13 @@ namespace MarsFramework.Global
 
         public static int Browser = Int32.Parse(MarsResource.Browser);
         public static String ExcelPath = MarsResource.ExcelPath;
+      
         public static string ScreenshotPath = MarsResource.ScreenShotPath;
         public static string ReportPath = MarsResource.ReportPath;
         #endregion
 
         #region reports
-        public static ExtentTest test;
+       // public static ExtentTest test;
         public static ExtentReports extent;
         #endregion
 
@@ -37,6 +38,7 @@ namespace MarsFramework.Global
                     break;
                 case 2:
                     GlobalDefinitions.driver = new ChromeDriver();
+                    GlobalDefinitions.driver.Navigate().GoToUrl("http://localhost:5000/Home");
                     GlobalDefinitions.driver.Manage().Window.Maximize();
                     break;
 
@@ -68,9 +70,9 @@ namespace MarsFramework.Global
         {
             // Screenshot
             String img = SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report");//AddScreenCapture(@"E:\Dropbox\VisualStudio\Projects\Beehive\TestReports\ScreenShots\");
-            test.Log(LogStatus.Info, "Image example: " + img);
+            //test.Log(LogStatus.Info, "Image example: " + img);
             // end test. (Reports)
-            extent.EndTest(test);
+            //extent.EndTest(test);
             // calling Flush writes everything to the log file (Reports)
             extent.Flush();
             // Close the driver :)            
