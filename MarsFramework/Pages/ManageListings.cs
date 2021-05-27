@@ -5,6 +5,7 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
 using System;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace MarsFramework.Pages
 {
@@ -23,13 +24,15 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "(//i[@class='eye icon'])[1]")]
         private IWebElement viewIcon { get; set; }
 
-        //Delete the listing
-        [FindsBy(How = How.XPath, Using = "//i[@class='remove icon']")]
-        private IWebElement deleteIcon { get; set; }
+        
 
         //Edit the listing
         [FindsBy(How = How.XPath, Using = "//i[@class='outline write icon']")]
         private IWebElement editIcon { get; set; }
+
+        //Delete the listing
+        [FindsBy(How = How.XPath, Using = "//i[@class='remove icon']")]
+        private IWebElement deleteIcon { get; set; }
 
         //Click on Yes/No for Delete Confirmation
         [FindsBy(How = How.XPath, Using = "//button[normalize-space()='Yes']")]
@@ -56,10 +59,29 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//body/div/div/div[@id='service-listing-section']/div[contains(@class,'ui container')]/div[contains(@class,'listing')]/form[contains(@class,'ui form')]/div[contains(@class,'tooltip-target ui grid')]/div[contains(@class,'twelve wide column')]/div[contains(@class,'')]/div[contains(@class,'ReactTags__tags')]/div[contains(@class,'ReactTags__selected')]/div[contains(@class,'ReactTags__tagInput')]/input[1]")]
         private IWebElement Tags { get; set; }
 
-
         //Deleting [x] on Tags
         [FindsBy(How = How.XPath, Using = "//a[normalize-space()='×']")]
         private IWebElement deleteTags { get; set; }
+
+        //Click on Start Date dropdown
+        [FindsBy(How = How.Name, Using = "startDate")]
+        private IWebElement StartDateDropDown { get; set; }
+
+        //Click on End Date dropdown
+        [FindsBy(How = How.Name, Using = "endDate")]
+        private IWebElement EndDateDropDown { get; set; }
+
+        //Day Check Box
+        [FindsBy(How = How.Name, Using = "Available")]
+        private IList<IWebElement> AvailableCheckBoxes { get; set; }
+
+        //Start Time
+        [FindsBy(How = How.Name, Using = "StartTime")]
+        private IList<IWebElement> StartTimes { get; set; }
+
+        //End Time
+        [FindsBy(How = How.Name, Using = "EndTime")]
+        private IList<IWebElement> EndTimes { get; set; }
 
         //Click on Save button
         [FindsBy(How = How.XPath, Using = "//input[@value='Save']")]
@@ -122,13 +144,6 @@ namespace MarsFramework.Pages
             GlobalDefinitions.wait(5);
 
 
-            //Assertion if the actual category is the same as the expected category
-            //var actualCategory = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCategory}']")).Text;
-            //Assert.AreEqual(actualCategory, expectedCategory);
-            //GlobalDefinitions.wait(10);
-
-
-
             //Click the delete[x] from the tags and clearing the existing tags before inputting a new one
             deleteTags.Click();
             Tags.Clear();
@@ -139,10 +154,48 @@ namespace MarsFramework.Pages
             Tags.SendKeys(Environment.NewLine);
 
 
+            //Populate the Excel Sheet from Time Sheet
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Time");
+
+            //Reading the excel file for StartDate
+            StartDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Start Date"));
+
+            //Reading the excel file for EndDate
+            EndDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "End Date"));
+
+
+            //Using a for loop for reading the excel file including the days[Checkboxes]
+            for (var i = 2; i <= 8; i++)
+            {
+                //Reading the days checkbox element starting on the 2nd row [i-2]
+                AvailableCheckBoxes[i - 2].Click();
+
+
+                //Readtime = converting the string format to Date time format (see GlobalDefinitions changes)
+                var excelStartTime = GlobalDefinitions.ExcelLib.ReadTime(i, "Start Time");
+
+                //passing the value of excelStartTime as ex: (0700am) since the system is not accepting spaces
+                var startTime = excelStartTime.ToString("hhmmtt");
+
+
+                //Readtime = converting the string format to Date time format (see GlobalDefinitions changes)
+                var excelEndTime = GlobalDefinitions.ExcelLib.ReadTime(i, "End Time");
+                var endTime = excelEndTime.ToString("hhmmtt");
+
+                //Reading data from excel file starting on the 2nd row
+                StartTimes[i - 2].SendKeys(startTime);
+                EndTimes[i - 2].SendKeys(endTime);
+            }
+
             //Saving the updated skills
             Save.Click();
             GlobalDefinitions.wait(20);
-          
+
+            //Assertion if the actual category is the same as the expected category
+            //var actualCategory = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCategory}']")).Text;
+            //Assert.AreEqual(actualCategory, expectedCategory);
+            //GlobalDefinitions.wait(10);
+
 
             //Enabling the delete Icon in the Manage Listing feature
             deleteIcon.Click();
