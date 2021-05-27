@@ -115,7 +115,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CategoryDropDown\selectByVisibleText.cs" />
     <Compile Include="Config\MarsResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
