@@ -132,6 +132,11 @@ namespace MarsFramework.Global
                 }
 
             }
+
+            internal static object ReadData(int v)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion

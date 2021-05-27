@@ -13,7 +13,15 @@ namespace MarsFramework
         {
 
 
+            [Test]
 
+            public void Profile()
+            {
+                var Profile = new Profile();
+                PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
+                Profile.ProfileAvail();
+            
+            }
                 
 
              [Test]

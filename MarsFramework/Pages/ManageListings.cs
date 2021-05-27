@@ -148,7 +148,7 @@ namespace MarsFramework.Pages
             deleteTags.Click();
             Tags.Clear();
 
-            //Reading the Excelf file- Tags
+            //Reading the Excel file- Tags
             Tags.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Tags"));
             //Enabling the ENTER mode to accept the new tags
             Tags.SendKeys(Environment.NewLine);
