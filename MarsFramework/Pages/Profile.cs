@@ -172,7 +172,11 @@ namespace MarsFramework
 
         internal void EditProfile()
         {
+
+            ////changes on profile//
             GlobalDefinitions.driver.Navigate().GoToUrl("http://localhost:5000/Account/Profile");
+
+
             
         }
 
