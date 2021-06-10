@@ -129,12 +129,12 @@
     <comment>If true Login, else Register</comment>
   </data>
   <data name="ReportPath" xml:space="preserve">
-    <value>C:\MarsQAProj2\marsframework\MarsFramework\TestReports\ExtentReports 2.0_files</value>
+    <value>C:\ADVANCED TASKS\NunitTask\MarsFramework\TestReports\ExtentReports 2.0_files</value>
   </data>
   <data name="ReportXMLPath" xml:space="preserve">
-    <value>C:\MarsQAProj2\marsframework\MarsFramework\TestReports\ReportXML</value>
+    <value>C:\ADVANCED TASKS\NunitTask\MarsFramework\TestReports\XMLReport</value>
   </data>
   <data name="ScreenShotPath" xml:space="preserve">
-    <value>C:\MarsQAProj2\marsframework\MarsFramework\TestReports\Screenshots</value>
+    <value>C:\ADVANCED TASKS\NunitTask\MarsFramework\TestReports\Screenshots</value>
   </data>
 </root>

@@ -24,8 +24,6 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "(//i[@class='eye icon'])[1]")]
         private IWebElement viewIcon { get; set; }
 
-        
-
         //Edit the listing
         [FindsBy(How = How.XPath, Using = "//i[@class='outline write icon']")]
         private IWebElement editIcon { get; set; }

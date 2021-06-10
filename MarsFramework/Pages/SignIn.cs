@@ -54,10 +54,6 @@ namespace MarsFramework.Pages
            //Click on Login button to Login
             LoginBtn.Click();
 
-           
-            
-         
-
         }
     }
 }
