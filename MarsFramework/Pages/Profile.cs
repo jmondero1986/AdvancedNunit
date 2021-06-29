@@ -4,6 +4,7 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
 using System.Threading;
 using NUnit.Framework;
+using OpenQA.Selenium.Interactions;
 
 namespace MarsFramework
 {
@@ -154,7 +155,7 @@ namespace MarsFramework
 
         //Click on Cancel Skill Button
         [FindsBy(How = How.CssSelector, Using = "input[value='Cancel']")]
-        private IWebElement CancelSkillBtn { get; set; }
+        private IWebElement CancelUpdateSkillBtn { get; set; }
 
         //Click on Delete Skill Icon
         [FindsBy(How = How.CssSelector, Using = "tbody tr td:nth-child(3) span:nth-child(2) i:nth-child(1)")]
@@ -199,6 +200,24 @@ namespace MarsFramework
         [FindsBy(How = How.XPath, Using = "//input[@value='Cancel']")]
         private IWebElement CancelEdu { get; set; }
 
+        //Click on Update Education Icon
+        [FindsBy(How = How.CssSelector, Using = "td[class='right aligned'] i[class='outline write icon']")]
+        private IWebElement UpdatedEduIcon { get; set; }
+
+        //Click on Update Button for Education
+        [FindsBy(How = How.CssSelector, Using = "input[value='Update']")]
+        private IWebElement UpdatedEduBtn { get; set; }
+
+        //Click on Cancel Button for Updating Education
+        [FindsBy(How = How.CssSelector, Using = "input[value='Cancel']")]
+        private IWebElement CancelUpdateEduBtn { get; set; }
+
+        //Click on Delete Icon for Education
+        [FindsBy(How = How.CssSelector, Using = ".remove.icon")]
+        private IWebElement DeleteEduIcon { get; set; }
+
+
+
         //***CERTIFICATION***//
 
 
@@ -230,26 +249,32 @@ namespace MarsFramework
         [FindsBy(How = How.XPath, Using = "//input[@value='Cancel']")]
         private IWebElement CancelCertiBtn { get; set; }
 
+        //Click update icon for Certification
+        [FindsBy(How = How.CssSelector, Using = "td[class='right aligned'] i[class='outline write icon']")]
+        private IWebElement UpdateCertiIcon { get; set; }
+
+        //Click update Button for Certification
+        [FindsBy(How = How.CssSelector, Using = "input[value='Update']")]
+        private IWebElement UpdateCertiBtn { get; set; }
+
+        //Click Cancel Button for Updating Certification    
+        [FindsBy(How = How.CssSelector, Using = "input[value='Cancel']")]
+        private IWebElement CancelUpdateCertiBtn { get; set; }
+
+        //Click Delete Icon for Certification    
+        [FindsBy(How = How.XPath, Using = "//i[@class='remove icon']")]
+        private IWebElement DeleteCerti { get; set; }
+
         //***DESCRIPTION***//
-
-
-        ////Clicking Description Edit/Update button
-        //[FindsBy(How = How.XPath, Using = "//i[@class='outline write icon']")]
-        //private IWebElement DescriptionButton { get; set; }
-
-
-        ////Add Description
-        //[FindsBy(How = How.CssSelector, Using = "textarea[placeholder='Please tell us about any hobbies, additional expertise, or anything else you’d like to add.']")]
-        //private IWebElement Description { get; set; }
 
         //Click on Save Button
         [FindsBy(How = How.XPath, Using = "//button[@type='button']")]
         private IWebElement DescriptionSaveButton { get; set; }
 
-        //***PASSWORD***//
+        //***CHANGING PASSWORD***//
 
         //Click on the Profile Name Dropdown
-        [FindsBy(How = How.XPath, Using = "//span[@class='item ui dropdown link active visible']")]
+        [FindsBy(How = How.XPath, Using = "//a[normalize-space()='Go to Profile']")]
         private IWebElement ProfileNameDropdown { get; set; }
 
         //Select on the Change Password
@@ -294,6 +319,8 @@ namespace MarsFramework
             dropdownList.SelectByText(AvailTimeDropdown);
             GlobalDefinitions.wait(10);
 
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Availability Time Saves Successfully");
+
         }
 
         internal void ProfileAvailabilityHour()
@@ -315,6 +342,8 @@ namespace MarsFramework
             HoursDropdown.SelectByText(expectedAvailHours);
 
             GlobalDefinitions.wait(10);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Availability Hour Saves Successfully");
         }
 
         internal void ProfileAvailabilitySalary()
@@ -336,6 +365,8 @@ namespace MarsFramework
             var expectedSalary = GlobalDefinitions.ExcelLib.ReadData(2, "Salary");
             SalaryDropdown.SelectByText(expectedSalary);
             GlobalDefinitions.wait(10);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Availability Salary Saves Successfully");
         }
 
 
@@ -365,11 +396,16 @@ namespace MarsFramework
             GlobalDefinitions.wait(10);
 
             AddLang.Click();
-            GlobalDefinitions.wait(5);
 
-            //Assertion if the actual language is the same as the expected language
+            //GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.CssSelector(".ns-box-inner"),5);
+            //IWebElement popUpMsg = GlobalDefinitions.driver.FindElement(By.CssSelector(".ns-box-inner"));
+            //popUpMsg.SendKeys(expectedLanguage + " " + "has been added successfully to your languages");
+
+           // Assertion if the actual language is the same as the expected language
             var actualLanguage = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedLanguage}']")).Text;
             Assert.AreEqual(actualLanguage, expectedLanguage);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Language Added Successfully");
 
 
         }
@@ -401,7 +437,7 @@ namespace MarsFramework
             CancelLang.Click();
             GlobalDefinitions.wait(5);
 
-          
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Language Canceled Successfully");
         }
 
         internal void ProfileLanguageUpdate()
@@ -411,25 +447,32 @@ namespace MarsFramework
             GlobalDefinitions.wait(5);
             LanguageTab.Click();
 
+            GlobalDefinitions.wait(10);
             UpdateLangIcon.Click();
 
            
             //Populate the Excel Sheet from Language sheet
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "UpdateLanguage");
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Language");
             GlobalDefinitions.wait(10);
 
-            var expectedLanguage = GlobalDefinitions.ExcelLib.ReadData(2, "UpdatedLanguage");
+            var expectedLanguage = GlobalDefinitions.ExcelLib.ReadData(4, "Language");
             AddLangText.Clear();
             AddLangText.SendKeys(expectedLanguage);
             GlobalDefinitions.wait(10);
 
             SelectElement LanguageLevelDropdown = new SelectElement(ChooseLangOpt);
-            var LanguageLevel = GlobalDefinitions.ExcelLib.ReadData(2, "Language Level");
+            var LanguageLevel = GlobalDefinitions.ExcelLib.ReadData(4, "Language Level");
             LanguageLevelDropdown.SelectByText(LanguageLevel);
             GlobalDefinitions.wait(10);
 
             UpdateLangBtn.Click();
-            
+
+            //Assertion if the actual language is the same as the expected language
+            var actualLanguage = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedLanguage}']")).Text;
+            Assert.AreEqual(actualLanguage, expectedLanguage);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Language Updated Successfully");
+
         }
 
         internal void ProfileLanguageUpdate_Cancel()
@@ -443,20 +486,25 @@ namespace MarsFramework
 
 
             //Populate the Excel Sheet from Language sheet
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "UpdateLanguage");
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Language");
             GlobalDefinitions.wait(10);
 
-            var expectedLanguage = GlobalDefinitions.ExcelLib.ReadData(2, "UpdatedLanguage");
+            var expectedLanguage = GlobalDefinitions.ExcelLib.ReadData(4, "Language");
             AddLangText.SendKeys(expectedLanguage);
             GlobalDefinitions.wait(10);
 
             SelectElement LanguageLevelDropdown = new SelectElement(ChooseLangOpt);
-            var LanguageLevel = GlobalDefinitions.ExcelLib.ReadData(2, "Language Level");
+            var LanguageLevel = GlobalDefinitions.ExcelLib.ReadData(4, "Language Level");
             LanguageLevelDropdown.SelectByText(LanguageLevel);
             GlobalDefinitions.wait(10);
 
             UpdateCancelBtn.Click();
 
+            //Assertion if the actual language is the same as the expected language
+            var actualLanguage = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedLanguage}']")).Text;
+            Assert.AreEqual(actualLanguage, expectedLanguage);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Language Update Canceled Successfully");
         }
 
         internal void ProfileLanguageDelete()
@@ -469,7 +517,26 @@ namespace MarsFramework
             GlobalDefinitions.wait(5);
             DeleteLangIcon.Click();
 
+            var expectedLanguage = GlobalDefinitions.ExcelLib.ReadData(3, "Language");
+            GlobalDefinitions.wait(10);
 
+            //assertion if the deleted skills is existing or not after the confirmation
+
+            var isElementExist = true;
+            try
+            {
+                GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedLanguage}']"));
+            }
+            catch (NoSuchElementException)
+            {
+                isElementExist = false;
+            }
+
+            Assert.IsFalse(isElementExist);
+
+            Thread.Sleep(1000);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Language Deleted Successfully");
         }
 
         internal void ProfileSkillsAdd()
@@ -501,6 +568,7 @@ namespace MarsFramework
             var actualSkill = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedSkill}']")).Text;
             Assert.AreEqual(actualSkill, expectedSkill);
 
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Skills Added Successfully");
 
         }
 
@@ -529,7 +597,8 @@ namespace MarsFramework
             CancelSkill.Click();
             GlobalDefinitions.wait(5);
 
-           
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Skills Canceled Successfully");
+
         }
 
         internal void ProfileSkillsUpdate()
@@ -562,7 +631,40 @@ namespace MarsFramework
             var actualSkill = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedSkill}']")).Text;
             Assert.AreEqual(actualSkill, expectedSkill);
 
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Skills Updated Successfully");
+        }
 
+        internal void ProfileSkillsUpdate_Cancel()
+        {
+
+            GlobalDefinitions.wait(5);
+            SkillTab.Click();
+
+            //Populate the Excel Sheet from Skills sheet
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Skills");
+            GlobalDefinitions.wait(5);
+
+           
+            UpdateSkillIcon.Click();
+
+            var expectedSkill = GlobalDefinitions.ExcelLib.ReadData(4, "Skills");
+            AddSkillText.Clear();
+            AddSkillText.SendKeys(expectedSkill);
+            GlobalDefinitions.wait(15);
+
+            SelectElement SkillLevelDropdown = new SelectElement(ChooseSkilllevel);
+            var expectedSkillDropdown = GlobalDefinitions.ExcelLib.ReadData(4, "Skill Level");
+            SkillLevelDropdown.SelectByText(expectedSkillDropdown);
+            GlobalDefinitions.wait(15);
+
+            CancelUpdateSkillBtn.Click();
+            GlobalDefinitions.wait(10);
+
+            //Assertion if the actual skill is the same as the expected skill
+            var actualSkill = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedSkill}']")).Text;
+            Assert.AreEqual(actualSkill, expectedSkill);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Skills Update Canceled Successfully");
         }
 
         internal void ProfileSkillsDelete()
@@ -571,10 +673,32 @@ namespace MarsFramework
             GlobalDefinitions.wait(5);
             SkillTab.Click();
 
-            GlobalDefinitions.wait(5);
-            DeleteSkillIcon.Click();
+            //GlobalDefinitions.wait(5);
+            //DeleteSkillIcon.Click();
 
+            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.CssSelector("body > div:nth-child(1) > div:nth-child(1) > section:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > form:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(3) > span:nth-child(2) > i:nth-child(1)"), 15);
+            IWebElement DltSkillIcon = GlobalDefinitions.driver.FindElement(By.CssSelector("body > div:nth-child(1) > div:nth-child(1) > section:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > form:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(3) > span:nth-child(2) > i:nth-child(1)"));
+            DltSkillIcon.Click();
 
+            var expectedSkill = GlobalDefinitions.ExcelLib.ReadData(4, "Skills");
+
+            //assertion if the deleted skills is existing or not after the confirmation
+
+            var isElementExist = true;
+            try
+            {
+                GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedSkill}']"));
+            }
+            catch (NoSuchElementException)
+            {
+                isElementExist = false;
+            }
+
+            Assert.IsFalse(isElementExist);
+
+            Thread.Sleep(1000);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Skills Deleted Successfully");
         }
 
         internal void ProfileEducationAdd() 
@@ -621,6 +745,8 @@ namespace MarsFramework
             var actualUniversity = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedUniversity}']")).Text;
             Assert.AreEqual(actualUniversity, expectedUniversity);
 
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Education Added Successfully");
+
         }
 
         internal void ProfileEducationCancel()
@@ -663,7 +789,9 @@ namespace MarsFramework
             CancelEdu.Click();
             GlobalDefinitions.wait(5);
 
-            
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Education Canceled Successfully");
+
+
         }
 
         internal void ProfileEducationUpdate()
@@ -676,11 +804,17 @@ namespace MarsFramework
 
             //Populate the Excel Sheet from Education sheet
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Education");
+
+            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.CssSelector("tbody tr td:nth-child(6) span:nth-child(1) i:nth-child(1)"), 15);
+            IWebElement UpdateIcon = GlobalDefinitions.driver.FindElement(By.CssSelector("tbody tr td:nth-child(6) span:nth-child(1) i:nth-child(1)"));
+            UpdateIcon.Click();
+            //Actions action = new Actions(GlobalDefinitions.driver);
+            //action.Click();
+
+            //UpdatedEduIcon.Click();
             GlobalDefinitions.wait(5);
 
-            UpdateSkillIcon.Click();
-            GlobalDefinitions.wait(5);
-
+            EnterUniversity.Clear();
             EnterUniversity.SendKeys(GlobalDefinitions.ExcelLib.ReadData(4, "University"));
             GlobalDefinitions.wait(10);
 
@@ -689,12 +823,12 @@ namespace MarsFramework
             UniversityDropdown.SelectByText(expectedUniversity);
             GlobalDefinitions.wait(10);
 
-
             SelectElement TitleDropdown = new SelectElement(ChooseTitle);
             var expectedTitle = GlobalDefinitions.ExcelLib.ReadData(4, "Title");
             TitleDropdown.SelectByText(expectedTitle);
             GlobalDefinitions.wait(10);
 
+            Degree.Clear();
             Degree.SendKeys(GlobalDefinitions.ExcelLib.ReadData(4, "Degree"));
             GlobalDefinitions.wait(10);
 
@@ -703,16 +837,19 @@ namespace MarsFramework
             DegreeYearDropdown.SelectByText(expectedDegreeYear);
             GlobalDefinitions.wait(10);
 
-            UpdateSkillBtn.Click();
+         
+            UpdatedEduBtn.Click();
             GlobalDefinitions.wait(5);
 
             //Assertion if the actual education is the same as the expected education
             var actualUniversity = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedUniversity}']")).Text;
             Assert.AreEqual(actualUniversity, expectedUniversity);
 
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Education Updated Successfully");
+
         }
 
-        internal void ProfileEducationDelete()
+        internal void ProfileEducationUpdate_Cancel()
         {
 
             GlobalDefinitions.wait(5);
@@ -722,12 +859,17 @@ namespace MarsFramework
 
             //Populate the Excel Sheet from Education sheet
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Education");
+
+            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.CssSelector("tbody tr td:nth-child(6) span:nth-child(1) i:nth-child(1)"), 15);
+            IWebElement UpdateIcon = GlobalDefinitions.driver.FindElement(By.CssSelector("tbody tr td:nth-child(6) span:nth-child(1) i:nth-child(1)"));
+            UpdateIcon.Click();
+           
+
+            //UpdatedEduIcon.Click();
             GlobalDefinitions.wait(5);
 
-            AddNewEducation.Click();
-            GlobalDefinitions.wait(5);
-
-            EnterUniversity.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "University"));
+            EnterUniversity.Clear();
+            EnterUniversity.SendKeys(GlobalDefinitions.ExcelLib.ReadData(4, "University"));
             GlobalDefinitions.wait(10);
 
             SelectElement UniversityDropdown = new SelectElement(ChooseCountry);
@@ -735,32 +877,69 @@ namespace MarsFramework
             UniversityDropdown.SelectByText(expectedUniversity);
             GlobalDefinitions.wait(10);
 
-
             SelectElement TitleDropdown = new SelectElement(ChooseTitle);
-            var expectedTitle = GlobalDefinitions.ExcelLib.ReadData(2, "Title");
+            var expectedTitle = GlobalDefinitions.ExcelLib.ReadData(4, "Title");
             TitleDropdown.SelectByText(expectedTitle);
             GlobalDefinitions.wait(10);
 
-            Degree.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Degree"));
+            Degree.Clear();
+            Degree.SendKeys(GlobalDefinitions.ExcelLib.ReadData(4, "Degree"));
             GlobalDefinitions.wait(10);
 
             SelectElement DegreeYearDropdown = new SelectElement(DegreeYear);
-            var expectedDegreeYear = GlobalDefinitions.ExcelLib.ReadData(2, "Year of Graduation");
+            var expectedDegreeYear = GlobalDefinitions.ExcelLib.ReadData(4, "Year of Graduation");
             DegreeYearDropdown.SelectByText(expectedDegreeYear);
             GlobalDefinitions.wait(10);
 
-            AddEdu.Click();
+
+            CancelUpdateEduBtn.Click();
             GlobalDefinitions.wait(5);
 
             //Assertion if the actual education is the same as the expected education
             var actualUniversity = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedUniversity}']")).Text;
             Assert.AreEqual(actualUniversity, expectedUniversity);
 
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Education Update Cancel Successfully");
+
+        }
+
+
+
+        internal void ProfileEducationDelete()
+        {
+            GlobalDefinitions.wait(5);
+            EducationTab.Click();
+
+            
+            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.CssSelector("tbody tr td:nth-child(6) span:nth-child(2) i:nth-child(1)"), 15);
+            IWebElement DltEduIcon = GlobalDefinitions.driver.FindElement(By.CssSelector("tbody tr td:nth-child(6) span:nth-child(2) i:nth-child(1)"));
+            DltEduIcon.Click();
+
+            var expectedCollegeName = GlobalDefinitions.ExcelLib.ReadData(4, "University");
+
+            //assertion if the deleted skills is existing or not after the confirmation
+
+            var isElementExist = true;
+            try
+            {
+                GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCollegeName}']"));
+            }
+            catch (NoSuchElementException)
+            {
+                isElementExist = false;
+            }
+
+            Assert.IsFalse(isElementExist);
+
+            Thread.Sleep(1000);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Education Deleted Successfully");
         }
 
         internal void ProfileCertificationAdd()
         {
             GlobalDefinitions.wait(5);
+           
             CertificationTab.Click();
 
             //Populate the Excel Sheet from Certification sheet
@@ -770,25 +949,28 @@ namespace MarsFramework
             AddNewCerti.Click();
             GlobalDefinitions.wait(5);
 
-            SelectElement Certification = new SelectElement(EnterCerti);
-            var expectedCertification = GlobalDefinitions.ExcelLib.ReadData(2, "Certificate");
-            Certification.SelectByText(expectedCertification);
+
+            EnterCerti.Clear();
+            EnterCerti.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Certificate"));
             GlobalDefinitions.wait(10);
 
+            CertiFrom.Clear();
             CertiFrom.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Certified from"));
             GlobalDefinitions.wait(10);
 
             SelectElement certiYearDropdown = new SelectElement(CertiYear);
-            var expectedYear = GlobalDefinitions.ExcelLib.ReadData(2, "Year");
-            certiYearDropdown.SelectByText(expectedYear);
+            var expectedCertiYear = GlobalDefinitions.ExcelLib.ReadData(2, "Year");
+            certiYearDropdown.SelectByText(expectedCertiYear);
             GlobalDefinitions.wait(10);
 
             AddCertiBtn.Click();
 
             //Assertion if the actual certification is the same as the expected certification
-            var actualCertification = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCertification}']")).Text;
-            Assert.AreEqual(actualCertification, expectedCertification);
+            var actualCertiYear = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCertiYear}']")).Text;
+            Assert.AreEqual(actualCertiYear, expectedCertiYear);
 
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Certification Added Successfully");
+            
         }
 
         internal void ProfileCertificationCancel()
@@ -803,90 +985,130 @@ namespace MarsFramework
             AddNewCerti.Click();
             GlobalDefinitions.wait(5);
 
-            SelectElement Certification = new SelectElement(EnterCerti);
-            var expectedCertification = GlobalDefinitions.ExcelLib.ReadData(2, "Certificate");
-            Certification.SelectByText(expectedCertification);
+            EnterCerti.Clear();
+            EnterCerti.SendKeys(GlobalDefinitions.ExcelLib.ReadData(3, "Certificate"));
             GlobalDefinitions.wait(10);
 
             CertiFrom.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Certified from"));
             GlobalDefinitions.wait(10);
 
             SelectElement certiYearDropdown = new SelectElement(CertiYear);
-            var expectedYear = GlobalDefinitions.ExcelLib.ReadData(2, "Year");
+            var expectedYear = GlobalDefinitions.ExcelLib.ReadData(3, "Year");
             certiYearDropdown.SelectByText(expectedYear);
             GlobalDefinitions.wait(10);
 
-            AddCertiBtn.Click();
+            CancelCertiBtn.Click();
+            GlobalDefinitions.wait(10);
 
-            //Assertion if the actual certification is the same as the expected certification
-            var actualCertification = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCertification}']")).Text;
-            Assert.AreEqual(actualCertification, expectedCertification);
-
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Certification Canceled Successfully");
         }
 
         internal void ProfileCertificationUpdate()
         {
-            GlobalDefinitions.wait(5);
+            GlobalDefinitions.wait(10);
             CertificationTab.Click();
 
             //Populate the Excel Sheet from Certification sheet
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Certification");
             GlobalDefinitions.wait(10);
 
-            AddNewCerti.Click();
+            var updateCertIcon = GlobalDefinitions.driver.FindElement(By.CssSelector("tbody tr td:nth-child(4) span:nth-child(1) i:nth-child(1)"));
+            //UpdateCertiIcon.Click();
+            updateCertIcon.Click();
             GlobalDefinitions.wait(5);
 
-            SelectElement Certification = new SelectElement(EnterCerti);
-            var expectedCertification = GlobalDefinitions.ExcelLib.ReadData(2, "Certificate");
-            Certification.SelectByText(expectedCertification);
+            EnterCerti.Clear();
+            EnterCerti.SendKeys(GlobalDefinitions.ExcelLib.ReadData(3, "Certificate"));
             GlobalDefinitions.wait(10);
 
+            CertiFrom.Clear();
             CertiFrom.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Certified from"));
             GlobalDefinitions.wait(10);
 
             SelectElement certiYearDropdown = new SelectElement(CertiYear);
-            var expectedYear = GlobalDefinitions.ExcelLib.ReadData(2, "Year");
-            certiYearDropdown.SelectByText(expectedYear);
+            var expectedCertiYear = GlobalDefinitions.ExcelLib.ReadData(3, "Year");
+            certiYearDropdown.SelectByText(expectedCertiYear);
             GlobalDefinitions.wait(10);
 
-            AddCertiBtn.Click();
+            UpdateCertiBtn.Click();
 
             //Assertion if the actual certification is the same as the expected certification
-            var actualCertification = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCertification}']")).Text;
-            Assert.AreEqual(actualCertification, expectedCertification);
+            var actualCertiYear = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCertiYear}']")).Text;
+            Assert.AreEqual(actualCertiYear, expectedCertiYear);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Certification Updated Successfully");
+        }
+
+        internal void ProfileCertificationUpdate_Cancel()
+        {
+            GlobalDefinitions.wait(10);
+            CertificationTab.Click();
+
+            //Populate the Excel Sheet from Certification sheet
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Certification");
+            GlobalDefinitions.wait(10);
+
+
+            var updateCertIcon = GlobalDefinitions.driver.FindElement(By.CssSelector("tbody tr td:nth-child(4) span:nth-child(1) i:nth-child(1)"));
+            //UpdateCertiIcon.Click();
+            updateCertIcon.Click();
+            GlobalDefinitions.wait(5);
+
+            EnterCerti.Clear();
+            EnterCerti.SendKeys(GlobalDefinitions.ExcelLib.ReadData(3, "Certificate"));
+            GlobalDefinitions.wait(10);
+
+            CertiFrom.Clear();
+            CertiFrom.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Certified from"));
+            GlobalDefinitions.wait(10);
+
+            SelectElement certiYearDropdown = new SelectElement(CertiYear);
+            var expectedCertiYear = GlobalDefinitions.ExcelLib.ReadData(3, "Year");
+            certiYearDropdown.SelectByText(expectedCertiYear);
+            GlobalDefinitions.wait(10);
+
+            CancelUpdateCertiBtn.Click();
+
+            //Assertion if the actual certification is the same as the expected certification
+            var actualCertiYear = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCertiYear}']")).Text;
+            Assert.AreEqual(actualCertiYear, expectedCertiYear);
+
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Certification Update Canceled Successfully");
 
         }
 
+
         internal void ProfileCertificationDelete()
         {
-            GlobalDefinitions.wait(5);
+            GlobalDefinitions.wait(10);
             CertificationTab.Click();
 
-            //Populate the Excel Sheet from Certification sheet
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Certification");
-            GlobalDefinitions.wait(10);
+            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.CssSelector("tbody tr td:nth-child(4) span:nth-child(2) i:nth-child(1)"), 15);
+            IWebElement DltCertiIcon = GlobalDefinitions.driver.FindElement(By.CssSelector("tbody tr td:nth-child(4) span:nth-child(2) i:nth-child(1)"));
+            DltCertiIcon.Click();
 
-            AddNewCerti.Click();
-            GlobalDefinitions.wait(5);
+            //SelectElement certiYearDropdown = new SelectElement(CertiYear);
+            var expectedCertiYear = GlobalDefinitions.ExcelLib.ReadData(3, "Year");
+            //certiYearDropdown.SelectByText(expectedCertiYear);
+            
 
-            SelectElement Certification = new SelectElement(EnterCerti);
-            var expectedCertification = GlobalDefinitions.ExcelLib.ReadData(2, "Certificate");
-            Certification.SelectByText(expectedCertification);
-            GlobalDefinitions.wait(10);
+            //assertion if the deleted skills is existing or not after the confirmation
 
-            CertiFrom.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Certified from"));
-            GlobalDefinitions.wait(10);
+            var isElementExist = true;
+            try
+            {
+                GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCertiYear}']"));
+            }
+            catch (NoSuchElementException)
+            {
+                isElementExist = false;
+            }
 
-            SelectElement certiYearDropdown = new SelectElement(CertiYear);
-            var expectedYear = GlobalDefinitions.ExcelLib.ReadData(2, "Year");
-            certiYearDropdown.SelectByText(expectedYear);
-            GlobalDefinitions.wait(10);
+            Assert.IsFalse(isElementExist);
 
-            AddCertiBtn.Click();
+            Thread.Sleep(1000);
 
-            //Assertion if the actual certification is the same as the expected certification
-            var actualCertification = GlobalDefinitions.driver.FindElement(By.XPath($"//td[normalize-space()='{expectedCertification}']")).Text;
-            Assert.AreEqual(actualCertification, expectedCertification);
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Certification Deleted Successfully");
 
         }
 
@@ -904,6 +1126,7 @@ namespace MarsFramework
             IWebElement descriptionBtn = GlobalDefinitions.driver.FindElement(By.CssSelector("h3[class='ui dividing header'] span[class='button']"));
             descriptionBtn.Click();
 
+
             GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.Name("value"),20);
 
             IWebElement descriptionTxtbox = GlobalDefinitions.driver.FindElement(By.Name("value"));
@@ -913,25 +1136,64 @@ namespace MarsFramework
             GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.XPath("//button[@type='button']"), 20);
             IWebElement descriptionSaveButton = GlobalDefinitions.driver.FindElement(By.XPath("//button[@type='button']"));
             descriptionSaveButton.Click();
-            
-            
+
+
+            ////Assertion if the actual Description is the same as the expected description
+            //var actualDescription = GlobalDefinitions.driver.FindElement(By.CssSelector($"//span[contains(text(),'{descriptionTxtbox}')]")).Text;
+            //Assert.AreEqual(actualDescription, descriptionTxtbox);
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Description Added Successfully");
+        }
+
+        internal void ProfileDescriptionUpdate()
+        {
+
+            GlobalDefinitions.wait(10);
+
+
+            //Populate the Excel Sheet from Description sheet
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Description");
+
+            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.CssSelector("h3[class='ui dividing header'] span[class='button']"), 15);
+
+            IWebElement descriptionBtnUpdate = GlobalDefinitions.driver.FindElement(By.CssSelector("h3[class='ui dividing header'] span[class='button']"));
+            descriptionBtnUpdate.Click();
+
+            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.Name("value"), 20);
+
+            IWebElement descriptionTxtbox = GlobalDefinitions.driver.FindElement(By.Name("value"));
+            descriptionTxtbox.Clear();
+            descriptionTxtbox.SendKeys(GlobalDefinitions.ExcelLib.ReadData(3, "Description"));
+
+            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.XPath("//button[@type='button']"), 20);
+            IWebElement descriptionSaveButton = GlobalDefinitions.driver.FindElement(By.XPath("//button[@type='button']"));
+            descriptionSaveButton.Click();
 
             ////Assertion if the actual Description is the same as the expected description
             //var actualDescription = GlobalDefinitions.driver.FindElement(By.XPath($"//span[contains(text(),'{descriptionTxtbox}')]")).Text;
             //Assert.AreEqual(actualDescription, descriptionTxtbox);
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Description Updated Successfully");
+
             
         }
 
+
+
         internal void ChangingPassword() 
         {
-
-            GlobalDefinitions.wait(5);
-
-            ProfileNameDropdown.Click();
-            ChangePassword.Click();
+            GlobalDefinitions.wait(10);
 
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "Signin");
 
+            IWebElement ProfileSpanElement = GlobalDefinitions.driver.FindElement(By.XPath("//span[contains(@class,'item ui dropdown link')]"));
+            ProfileSpanElement.Click();
+
+            Actions action = new Actions(GlobalDefinitions.driver);
+            action.Click();
+
+            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.XPath("//a[normalize-space()='Change Password']"), 15);
+            IWebElement ChangePasswordDrpdwn = GlobalDefinitions.driver.FindElement(By.XPath("//a[normalize-space()='Change Password']"));
+            ChangePasswordDrpdwn.Click();
+                        
             CurrentPswdTxtbox.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Password"));
             GlobalDefinitions.wait(10);
 
@@ -943,6 +1205,7 @@ namespace MarsFramework
 
             SaveNewPswdBtn.Click();
 
+            Base.test.Log(RelevantCodes.ExtentReports.LogStatus.Info, "Password Changed Successfully");
 
         }
     }

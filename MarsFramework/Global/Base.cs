@@ -1,6 +1,7 @@
 ﻿using MarsFramework.Config;
 using MarsFramework.Pages;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using RelevantCodes.ExtentReports;
@@ -21,7 +22,7 @@ namespace MarsFramework.Global
         #endregion
 
         #region reports
-       // public static ExtentTest test;
+        public static ExtentTest test;
         public static ExtentReports extent;
         #endregion
 
@@ -37,7 +38,7 @@ namespace MarsFramework.Global
                     GlobalDefinitions.driver = new FirefoxDriver();
                     break;
                 case 2:
-                    GlobalDefinitions.driver = new ChromeDriver();
+                    GlobalDefinitions.driver = new ChromeDriver(@"C:\ADVANCED TASKS\chromedriver_win32");
                     GlobalDefinitions.driver.Navigate().GoToUrl("http://localhost:5000/Home");
                     GlobalDefinitions.driver.Manage().Window.Maximize();
                     break;
@@ -68,16 +69,23 @@ namespace MarsFramework.Global
         [TearDown]
         public void TearDown()
         {
-            // Screenshot
-            String img = SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report");//AddScreenCapture(@"E:\Dropbox\VisualStudio\Projects\Beehive\TestReports\ScreenShots\");
-            //test.Log(LogStatus.Info, "Image example: " + img);
+
+
+            if (TestContext.CurrentContext.Result.Outcome != ResultState.Success)
+            {
+                // Screenshot
+                String img = SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report");//AddScreenCapture(@"E:\Dropbox\VisualStudio\Projects\Beehive\TestReports\ScreenShots\");
+                test.Log(LogStatus.Error, "Image example: " + img);
+            }
+
             // end test. (Reports)
-            //extent.EndTest(test);
+            extent.EndTest(test);
             // calling Flush writes everything to the log file (Reports)
             extent.Flush();
             // Close the driver :)            
             GlobalDefinitions.driver.Close();
-            GlobalDefinitions.driver.Quit();
+
+           
         }
         #endregion
 

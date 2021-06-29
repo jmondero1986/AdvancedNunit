@@ -88,7 +88,7 @@ namespace MarsFramework.Config {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C:\ADVANCED TASKS\NunitTask\MarsFramework\TestReports\ExtentReports 2.0_files.
+        ///   Looks up a localized string similar to C:\ADVANCED TASKS\NunitTask\Julie_Reports\ReportPath.html.
         /// </summary>
         internal static string ReportPath {
             get {
@@ -97,7 +97,7 @@ namespace MarsFramework.Config {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C:\ADVANCED TASKS\NunitTask\MarsFramework\TestReports\XMLReport.
+        ///   Looks up a localized string similar to C:\ADVANCED TASKS\NunitTask\Julie_Reports\ReportXMLPath.xml.
         /// </summary>
         internal static string ReportXMLPath {
             get {
@@ -106,7 +106,7 @@ namespace MarsFramework.Config {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C:\ADVANCED TASKS\NunitTask\MarsFramework\TestReports\Screenshots.
+        ///   Looks up a localized string similar to C:\ADVANCED TASKS\NunitTask\Julie_Reports\ScreenShotPath\.
         /// </summary>
         internal static string ScreenShotPath {
             get {

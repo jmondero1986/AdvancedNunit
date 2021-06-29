@@ -17,6 +17,7 @@ namespace MarsFramework
 
             public void ProfileAvailabilityTimeTest_Saves()
             {
+                test = extent.StartTest("Availability Time");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileAvailabilityTime();
@@ -26,6 +27,7 @@ namespace MarsFramework
             [Test]
             public void ProfileAvailabilityHourTest_Saves()
             {
+                test = extent.StartTest("Availability Hour");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileAvailabilityHour();
@@ -35,6 +37,7 @@ namespace MarsFramework
             [Test]
             public void ProfileAvailabilitySalaryTest_Saves()
             {
+                test = extent.StartTest("Availability Salary");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileAvailabilitySalary();
@@ -45,6 +48,7 @@ namespace MarsFramework
             public void ProfileLanguageTest_Add()
             {
 
+                test = extent.StartTest("Adding New Language");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileLanguageAdd();
@@ -53,7 +57,7 @@ namespace MarsFramework
             [Test]
             public void ProfileLanguageTest_Cancel ()
             {
-
+                test = extent.StartTest("Cancel Adding New Language");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileLanguageCancel();
@@ -62,16 +66,25 @@ namespace MarsFramework
             [Test]
             public void ProfileLanguageTest_Update()
             {
-
+                test = extent.StartTest("Update Language");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileLanguageUpdate();
             }
 
             [Test]
+            public void ProfileLanguageTest_Update_Cancel()
+            {
+                test = extent.StartTest("Cancel Update Language");
+                var Profile = new Profile();
+                PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
+                Profile.ProfileLanguageUpdate_Cancel();
+            }
+
+            [Test]
             public void ProfileLanguageTest_Delete()
             {
-
+                test = extent.StartTest("Delete Language");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileLanguageDelete();
@@ -80,7 +93,7 @@ namespace MarsFramework
             [Test]
             public void ProfileSkillTest_Add()
             {
-
+                test = extent.StartTest("Adding Skills");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileSkillsAdd();
@@ -89,7 +102,7 @@ namespace MarsFramework
             [Test]
             public void ProfileSkillTest_Cancel()
             {
-
+                test = extent.StartTest("Cancel Adding Skills");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileSkillsCancel();
@@ -98,16 +111,25 @@ namespace MarsFramework
             [Test]
             public void ProfileSkillTest_Update()
             {
-
+                test = extent.StartTest("Update Skills");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileSkillsUpdate();
             }
 
             [Test]
+            public void ProfileSkillTest_Update_Cancel()
+            {
+                test = extent.StartTest("Cancel Updating Skills");
+                var Profile = new Profile();
+                PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
+                Profile.ProfileSkillsUpdate_Cancel();
+            }
+
+            [Test]
             public void ProfileSkillTest_Delete()
             {
-
+                test = extent.StartTest("Delete Skills");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileSkillsDelete();
@@ -117,7 +139,7 @@ namespace MarsFramework
             [Test]
             public void ProfileEducationTest_Add()
             {
-
+                test = extent.StartTest("Adding Education");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileEducationAdd();
@@ -126,7 +148,7 @@ namespace MarsFramework
             [Test]
             public void ProfileEducationTest_Cancel()
             {
-
+                test = extent.StartTest("Cancel Adding Education");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileEducationCancel();
@@ -135,25 +157,34 @@ namespace MarsFramework
             [Test]
             public void ProfileEducationTest_Update()
             {
-
+                test = extent.StartTest("Update Education");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileEducationUpdate();
+            }
+
+            [Test]
+            public void ProfileEducationTest_Update_Cancel()
+            {
+                test = extent.StartTest("Cancel Updating Education");
+                var Profile = new Profile();
+                PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
+                Profile.ProfileEducationUpdate_Cancel();
             }
 
             [Test]
             public void ProfileEducationTest_Delete()
             {
-
+                test = extent.StartTest("Delete Education");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
-                Profile.ProfileEducationUpdate();
+                Profile.ProfileEducationDelete();
             }
 
             [Test]
             public void ProfileCertificationTest_Add()
             {
-
+                test = extent.StartTest("Adding Certification");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileCertificationAdd();
@@ -162,34 +193,44 @@ namespace MarsFramework
             [Test]
             public void ProfileCertificationTest_Cancel()
             {
-
+                test = extent.StartTest("Cancel Adding Certification");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
-                Profile.ProfileCertificationAdd();
+                Profile.ProfileCertificationCancel();
             }
 
             [Test]
             public void ProfileCertificationTest_Update()
             {
-
+                test = extent.StartTest("Update Certification");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
-                Profile.ProfileCertificationAdd();
+                Profile.ProfileCertificationUpdate();
+            }
+
+
+            [Test]
+            public void ProfileCertificationTest_Update_Cancel()
+            {
+                test = extent.StartTest("Cancel Update Certification");
+                var Profile = new Profile();
+                PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
+                Profile.ProfileCertificationUpdate_Cancel();
             }
 
             [Test]
             public void ProfileCertificationTest_Delete()
             {
-
+                test = extent.StartTest("Delete Certification");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
-                Profile.ProfileCertificationAdd();
+                Profile.ProfileCertificationDelete();
             }
 
             [Test]
             public void ProfileDescriptionTest_Add()
             {
-
+                test = extent.StartTest("Add Description");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ProfileDescriptionAdd();
@@ -198,16 +239,16 @@ namespace MarsFramework
             [Test]
             public void ProfileDescriptionTest_Update()
             {
-
+                test = extent.StartTest(" Update Certification");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
-                Profile.ProfileDescriptionAdd();
+                Profile.ProfileDescriptionUpdate();
             }
 
             [Test]
             public void ChangingPasswordTest()
             {
-
+                test = extent.StartTest("Change Password");
                 var Profile = new Profile();
                 PageFactory.InitElements(Global.GlobalDefinitions.driver, Profile);
                 Profile.ChangingPassword();
