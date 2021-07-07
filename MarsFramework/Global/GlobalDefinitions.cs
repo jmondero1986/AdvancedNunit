@@ -1,85 +1,135 @@
-﻿using Excel;
+﻿using ExcelDataReader;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using SkillSharePortal_ServiceList.Config;
+using System.Threading.Tasks;
+//using RelevantCodes.ExtentReports;
+//using ExtentReports;
+using AventStack.ExtentReports;
+using SeleniumExtras.WaitHelpers;
 
-
-namespace MarsFramework.Global
+namespace SkillSharePortal_ServiceList.Global
 {
-    class GlobalDefinitions
+    public class GlobalDefinitions
     {
-        //Initialise the browser
         public static IWebDriver driver { get; set; }
 
-       
-        #region WaitforElement 
+        #region To access Path from resource file
+        public static string filepath = "\\Data\\Data.xlsx";
+        public static string ExcelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + filepath);
+        public static int Browser = Int32.Parse(SkillShareResource.WebBrowser);
+        public static string ScreenshotPath = "C:\\Users\\charulamba\\IndConn\\ADVANC TASK\\FromCharu\\SkillSharePortal_ServiceList\\ScreenShots\\";
+        //public static string ScreenShotsPath = "\\ScreenShots";
+        //public static string ScreenshotPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + ScreenShotsPath);
+        //public static String ExcelPath = SkillShareResource.ExcelPath;
+        //public static string ScreenshotPath = SkillShareResource.ScreenShotPath;
+        //public static string ReportPath = SkillShareResource.ReportPath;
+          #endregion
 
-        public static void wait(int time)
+        #region reports
+        public static ExtentTest test;
+        //public static ExtentReports extent;
+        #endregion
+
+        #region Wait
+        public static void ImplicitWait(int time)
         {
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(time);
-
         }
         public static IWebElement WaitForElement(IWebDriver driver, By by, int timeOutinSeconds)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeOutinSeconds));
-            return wait.Until(ExpectedConditions.ElementIsVisible(by));
+            return (wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(by)));
         }
+
+        /*public static IWebElement ElementPresent(IWebDriver driver, By by, int timeOutinSeconds)
+        {
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeOutinSeconds));
+            return (wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(by)));
+        }*/
+
+        
+        public static void ElementIsVisible(IWebDriver driver, string locator, string locatorvalue)
+        {
+            try
+            {
+                if (locator == "Id")
+                {
+                    var wait = new WebDriverWait(driver, new TimeSpan(0, 0, 5));
+                    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.Id(locatorvalue)));
+                }
+                if (locator == "XPath")
+                {
+                    var wait = new WebDriverWait(driver, new TimeSpan(0, 0, 10));
+                    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath(locatorvalue)));
+
+                }
+                if (locator == "CssSelector")
+                {
+                    var wait = new WebDriverWait(driver, new TimeSpan(0, 0, 10));
+                    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector(locatorvalue)));
+
+                }
+            }
+           catch (Exception ex)
+            {
+                Assert.Fail("Test failed while waiting for a webelement", ex.Message);
+            }
+
+        }
+
         #endregion
 
-
-        #region Excel 
+        
+        
+        #region ExcelForTestData
         public class ExcelLib
         {
-            static List<Datacollection> dataCol = new List<Datacollection>();
-
-            public class Datacollection
+            private static readonly List<Datacollection> DataCol = new List<Datacollection>();
+            // The following code helps to quit the windows in which you only need to pass the name of excel.
+            // ReSharper disable once UnusedMember.Local
+            private static void QuitExcel(string processtitle)
             {
-                public int rowNumber { get; set; }
-                public string colName { get; set; }
-                public string colValue { get; set; }
+                var processes = from p in Process.GetProcessesByName("EXCEL")
+                                select p;
+                foreach (var process in processes)
+                    if (process.MainWindowTitle == "Microsoft Excel - " + processtitle + " - Excel")
+                        process.Kill();
             }
-
-
-            public static void ClearData()
+            private static void ClearData()
             {
-                dataCol.Clear();
+                DataCol.Clear();
             }
-
-
-            private static DataTable ExcelToDataTable(string fileName, string SheetName)
+            private static DataTable ExcelToDataTable(string fileName, string sheetName)
             {
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
                 // Open file and return as Stream
-                using (System.IO.FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+                using (var stream = File.Open(fileName, FileMode.Open, FileAccess.Read))
                 {
-                    using (IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream))
+                    using (var reader = ExcelReaderFactory.CreateReader(stream))
                     {
-                        excelReader.IsFirstRowAsColumnNames = true;
-
-                        //Return as dataset
-                        DataSet result = excelReader.AsDataSet();
+                        var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                        {
+                            ConfigureDataTable = (data) => new ExcelDataTableConfiguration()
+                            {
+                                UseHeaderRow = true
+                            }
+                        });
                         //Get all the tables
-                        DataTableCollection table = result.Tables;
-
+                        var table = result.Tables;
                         // store it in data table
-                        DataTable resultTable = table[SheetName];
-
-                        //excelReader.Dispose();
-                        //excelReader.Close();
-                        // return
+                        var resultTable = table[sheetName];
                         return resultTable;
                     }
                 }
-            }
-
-            //Converting the time from STRING to Datetime
-            public static DateTime ReadTime(int rowNumber, string columnName)
-            {
-                return DateTime.Parse(ReadData(rowNumber, columnName));
             }
 
             public static string ReadData(int rowNumber, string columnName)
@@ -87,67 +137,59 @@ namespace MarsFramework.Global
                 try
                 {
                     //Retriving Data using LINQ to reduce much of iterations
-
                     rowNumber = rowNumber - 1;
-                    string data = (from colData in dataCol
-                                   where colData.colName == columnName && colData.rowNumber == rowNumber
-                                   select colData.colValue).SingleOrDefault();
-
+                    var data = (from colData in DataCol
+                                where (colData.ColName == columnName) && (colData.RowNumber == rowNumber)
+                                select colData.ColValue).SingleOrDefault();
                     //var datas = dataCol.Where(x => x.colName == columnName && x.rowNumber == rowNumber).SingleOrDefault().colValue;
-
-
-                    return data.ToString();
+                    return data;
                 }
-
                 catch (Exception e)
                 {
-                    //Added by Kumar
-                    Console.WriteLine("Exception occurred in ExcelLib Class ReadData Method!" + Environment.NewLine + e.Message.ToString());
+                    // ReSharper disable once LocalizableElement
+                    Console.WriteLine("Exception occurred in ExcelLib Class ReadData Method!" + Environment.NewLine +
+                                      e.Message);
                     return null;
                 }
             }
-
-            public static void PopulateInCollection(string fileName, string SheetName)
+            public static void PopulateInCollection(string fileName, string sheetName)
             {
-                ExcelLib.ClearData();
-                DataTable table = ExcelToDataTable(fileName, SheetName);
-
+                ClearData();
+                var table = ExcelToDataTable(fileName, sheetName);
                 //Iterate through the rows and columns of the Table
-                for (int row = 1; row <= table.Rows.Count; row++)
-                {
-                    for (int col = 0; col < table.Columns.Count; col++)
+                for (var row = 1; row <= table.Rows.Count; row++)
+                    for (var col = 0; col < table.Columns.Count; col++)
                     {
-                        Datacollection dtTable = new Datacollection()
+                        var dtTable = new Datacollection
                         {
-                            rowNumber = row,
-                            colName = table.Columns[col].ColumnName,
-                            colValue = table.Rows[row - 1][col].ToString()
+                            RowNumber = row,
+                            ColName = table.Columns[col].ColumnName,
+                            ColValue = table.Rows[row - 1][col].ToString()
                         };
-
-
                         //Add all the details for each row
-                        dataCol.Add(dtTable);
-
+                        DataCol.Add(dtTable);
                     }
-                }
-
             }
-
-            internal static object ReadData(int v)
+            private class Datacollection
             {
-                throw new NotImplementedException();
+                public int RowNumber { get; set; }
+                public string ColName { get; set; }
+                public string ColValue { get; set; }
             }
         }
+    }
 
-        #endregion
 
-        #region screenshots
-        public class SaveScreenShotClass
+
+    #endregion
+
+    #region ScreenShot
+    public class SaveScreenShotClass
         {
             public static string SaveScreenshot(IWebDriver driver, string ScreenShotFileName) // Definition
             {
-                var folderLocation = (Base.ScreenshotPath);
-
+                var folderLocation = GlobalDefinitions.ScreenshotPath;
+             
                 if (!System.IO.Directory.Exists(folderLocation))
                 {
                     System.IO.Directory.CreateDirectory(folderLocation);
@@ -158,14 +200,15 @@ namespace MarsFramework.Global
 
                 fileName.Append(ScreenShotFileName);
                 fileName.Append(DateTime.Now.ToString("_dd-mm-yyyy_mss"));
-                //fileName.Append(DateTime.Now.ToString("dd-mm-yyyym_ss"));
-                fileName.Append(".jpeg");
-                screenShot.SaveAsFile(fileName.ToString(), ScreenshotImageFormat.Jpeg);
-                return fileName.ToString();
+            
+            //fileName.Append(DateTime.Now.ToString("dd-mm-yyyym_ss"));
+            //fileName.Append(".jpeg"); 
+            //screenShot.SaveAsFile(fileName.ToString(), ScreenshotImageFormat.Jpeg);
+            fileName.Append(".Png");
+            screenShot.SaveAsFile(fileName.ToString(), ScreenshotImageFormat.Png);
+            return fileName.ToString();
             }
         }
-
-        
         #endregion
-    }
 }
+
